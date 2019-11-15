@@ -1,0 +1,11 @@
+ - name: install Extra Packages For Enterprise Linux in CentOS
+   yum: name=epel-release state=latest 
+   when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+ - name: install Extra Packages For Enterprise Linux in CentOS
+   copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
+   when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+ - name: install web nginx web server in CentOS
+   yum: name=nginx state=latest
+   when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")

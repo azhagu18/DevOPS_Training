@@ -1,0 +1,5 @@
+- name: This playbook will ping containers
+ hosts: all
+ tasks:
+  - name: ping the containers
+    ping:

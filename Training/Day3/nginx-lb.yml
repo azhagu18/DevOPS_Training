@@ -1,0 +1,23 @@
+- name: This playbook will install, configure & Deploy web pages into ignix
+  hosts: gateway
+  become: yes
+  
+  tasks:
+   - name: install web nginx web server
+     apt: name=nginx state=latest update_cache=yes
+
+   - name: Upgrade all packages to the latest version
+     apt:
+      name: aptitude
+      state: latest
+
+   - name: Configure nginx web root folder
+#     copy: src=default-lb dest=/etc/nginx/sites-available/default
+     copy: src=default-lb dest=/etc/nginx/nginx.conf
+
+   - name: Start the nginx web server
+     #service: name=nginx state=started enabled=yes
+     command: service nginx restart
+     #service:
+#      name: nginx
+      #state: started

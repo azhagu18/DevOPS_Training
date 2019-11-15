@@ -1,0 +1,11 @@
+[all]
+ubuntu[1:2]
+
+[dev]
+ubuntu1
+
+[qa]
+ubuntu2
+
+[remote-machine]
+192.168.12.181

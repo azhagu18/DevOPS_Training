@@ -1,0 +1,49 @@
+- name: This playbook will install, configure & Deploy web pages into ignix
+  hosts: app_servers
+  become: yes
+  vars:
+   - course_name: DevOPS with Ansible. XLR, Jenkins & Docker
+  tasks: 
+   - name: install web nginx web server in ubuntu
+     apt: name=nginx state=latest update_cache=yes
+     when: (ansible_distribution == "Ubuntu" and ansible_os_family == "Debian")
+
+   - name: install Extra Packages For Enterprise Linux in CentOS
+     yum: name=epel-release state=latest 
+     when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+   - name: install Extra Packages For Enterprise Linux in CentOS
+     copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
+     when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+   - name: install web nginx web server in CentOS
+     yum: name=nginx state=latest
+     when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+   - name: Upgrade all packages to the latest version
+     apt: name=aptitude state=latest
+     when: (ansible_distribution == "Ubuntu" and ansible_os_family == "Debian")
+
+   - name: Create nginx web root folder
+     file: path=/var/html mode=0777 state=directory
+
+   - name: Configure nginx web root folder in Ubuntu
+     copy: src=default dest=/etc/nginx/sites-available/default
+     when: (ansible_distribution == "Ubuntu" and ansible_os_family == "Debian")
+
+   - name: Configure nginx web root folder in CentOS
+     copy: src=default.conf dest=/etc/nginx/conf.d/default.conf
+     when: (ansible_distribution == "CentOS" and ansible_os_family == "RedHat")
+
+#   - name: Deploy custom web page into nginx web server on container
+#     template: src=index.html.j2 dest=/var/www/html/index.html
+
+   - name: Deploy custom web page into nginx web server on container
+     template: src=index.html.j2 dest=/var/html/index.html
+
+   - name: Restart he nginx web server
+     #service: name=nginx state=started enabled=yes
+     command: service nginx start
+     #service:
+#      name: nginx
+      #state: started
